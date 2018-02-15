@@ -119,10 +119,13 @@ an Invalid_Color exception with a useful message.
 
 exception Invalid_Color of string ;;
 
+let valid (num : int) : bool =
+  num <= 255 && num >= 0;;
+
 let valid_rgb (clr : color) : color =
   match clr with
   | Simple _ -> clr
-  | RGB (r, g, b) -> if (r >= 0 && r <= 255) && (g >= 0 && g <= 255) && (b >= 0 && b <= 255) then clr
+  | RGB (r, g, b) -> if valid r && valid g && valid b then clr
                       else raise (Invalid_Color "All parts of RGB must be between 0 and 255.");;
 
 (*......................................................................
@@ -131,8 +134,9 @@ for the channel values and returns a value of the color type. Be sure
 to verify the invariant.
 ......................................................................*)
 
-let make_color (c1 : int) (c2 : int) (c3 : int) : color =
-  failwith "make_color not implemented";;
+let make_color (r : int) (g : int) (b : int) : color =
+  if valid r && valid g && valid b then RGB (r, g, b)
+  else raise (Invalid_Color "All parts of RGB must be between 0 and 255");;
 
 (*......................................................................
 Exercise 4: Write a function, convert_to_rgb, that accepts a color and
@@ -210,7 +214,7 @@ should be. Then, consider the implications of representing the overall
 data type as a tuple or a record.
 ......................................................................*)
 
-type date = NotImplemented ;;
+type date = {year : int; month : int; day : int};;
 
 (* After you've thought it through, look up the Date module in the
 OCaml documentation to see how this was implemented there. If you
@@ -252,8 +256,16 @@ the invariant is violated, and returns the date if valid.
 
 exception Invalid_Date of string ;;
 
-let valid_date =
-  fun _ -> failwith "valid_date not implemented" ;;
+let valid_date (today : date) : date =
+  match today.month with
+  | 1 | 3 | 5 | 7 | 8 | 10 | 12 -> if today.day > 0 && today.day <= 31 then today else raise (Invalid_Date "That day doesn't exist!")
+  | 2 -> if today.day > 0 && today.day <= 28 then today
+          else if today.day == 29 then
+            if today.year mod 4 == 0 && (not (today.year mod 100 == 0) || today.year mod 400 == 0) then today
+            else raise (Invalid_Date "That day doesn't exist!")
+          else raise (Invalid_Date "That day doesn't exist!")
+  | 4 | 6 | 9 | 11 -> if today.day > 0 && today.day <= 30 then today else raise (Invalid_Date "That day doesn't exist!")
+  | _ -> raise (Invalid_Date "That day doesn't exist!");;
 
 
 (*======================================================================
