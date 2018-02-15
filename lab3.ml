@@ -153,8 +153,18 @@ below are some other values you might find helpful.
     240 | 130 | 240 | Violet
 ......................................................................*)
 
-let convert_to_rgb =
-  fun _ -> failwith "convert_to_rgb not implemented" ;;
+let convert_to_rgb (clr : color) : (int * int * int) =
+  match clr with
+  | Simple c -> (match c with
+                | Red -> (255, 0, 0)
+                | Green -> (0, 255, 0)
+                | Blue -> (0, 0, 255)
+                | Orange -> (255, 165, 0)
+                | Yellow -> (255, 255, 0)
+                | Indigo -> (75, 0, 130)
+                | Violet -> (240, 130, 240)
+                | Crimson -> (164, 16, 52))
+  | RGB (r, g, b) -> (r, g, b);;
 
 (* If we want to blend two colors, we might be tempted to average each
 of the individual color channels. This might be fine, but a quirk in
