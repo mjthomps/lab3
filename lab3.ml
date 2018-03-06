@@ -394,6 +394,8 @@ inequality. You may be accustomed to other operators, like, "==" and
 the Pervasives module can help explain why.)
 ......................................................................*)
 
+(*dumb version of this function; it assumes the oldest generation
+  is the person's parents*)
 let find_parents (fam : family) (name : string) : (person * person) option =
   let rec find_name (n : string) (f : family) : family option =
     match f with
@@ -473,7 +475,7 @@ the first two.
 ......................................................................*)
 
 let add_child_to_graph (g : graph) (kid : person) (p1 : person) (p2 : person) : graph =
-  (p1, ParentOf, kid) :: (p2, ParentOf, kid) :: g;;
+  (p1, ParentOf, kid) :: (p2, ParentOf, kid) :: g ;;
 
 (*......................................................................
 Exercise 18: Now, rewrite find_parents using this new graph form. Note
@@ -483,5 +485,16 @@ a string representing the name of the person whose parents you want
 to find, returning a person list for the parents.
 ......................................................................*)
 
-let find_parents_graph =
-  fun _ -> failwith "find_parents_graph not implemented" ;;
+let find_parents_graph (g : graph) (name : string) : person list =
+  let rec find_rels (n1 : string) (g1 : graph) : graph =
+    match g1 with
+    | [] -> []
+    | (p1, r, p2) :: t -> if p2.name = n1 && r = ParentOf then (p1, r, p2) :: find_rels n1 t else find_rels n1 t
+  in
+  let kship = find_rels name g in
+  match kship with
+  | [] -> []
+  | [(p1, _, _)] -> [p1]
+  | (p1, _, _) :: t -> p1 :: (match t with
+                              | [] -> []
+                              | (p2, _, _) :: t -> [p2]);;
