@@ -406,9 +406,9 @@ let find_parents (fam : family) (name : string) : (person * person) option =
   | Single _ | Family (_, _, []) -> None
   | Family (p1, p2, kids) ->
     let kidfam = find_name name fam in
-    if kidfam <> None then
-      Some (p1, p2)
-    else None;;
+    match kidfam with
+    | None -> None
+    | Some _ -> Some (p1, p2);;
 
 
 (*======================================================================
