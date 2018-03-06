@@ -349,7 +349,7 @@ exception Family_Trouble of string ;;
 let marry (fam : family) (p : person) : family =
   match fam with
   | Single spouse -> Family (spouse, p, [])
-  | Family (p1, p2, _) -> raise (Family_Trouble "Can't marry a person who's already married!");;
+  | Family (_p1, _p2, _kids) -> raise (Family_Trouble "Can't marry a person who's already married!");;
 
 (*......................................................................
 Exercise 13: Write a function that accepts two families, and returns
@@ -360,8 +360,11 @@ assumptions provided in the type definition of family to determine how
 to behave in corner cases.
 ......................................................................*)
 
-let add_to_family =
-  fun _ -> failwith "add_to_family not implemented" ;;
+let rec add_to_family (f1 : family) (f2 : family) : family =
+  match f1 with
+  | Single p -> f1
+  | Family (p1, p2, []) -> Family (p1, p2, [f2])
+  | Family (p1, p2, kids) -> Family (p1, p2, kids @ [f2]);;
 
 (*......................................................................
 Exercise 14: Complete the function below that counts the number of
