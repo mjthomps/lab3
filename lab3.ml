@@ -360,7 +360,7 @@ assumptions provided in the type definition of family to determine how
 to behave in corner cases.
 ......................................................................*)
 
-let rec add_to_family (f1 : family) (f2 : family) : family =
+let add_to_family (f1 : family) (f2 : family) : family =
   match f1 with
   | Single p -> raise (Family_Trouble "Can't add family to unmarried person :(")
   | Family (p1, p2, []) -> Family (p1, p2, [f2])
@@ -371,8 +371,11 @@ Exercise 14: Complete the function below that counts the number of
 people in a given family. Be sure you count all spouses and children.
 ......................................................................*)
 
-let count_people =
-  fun _ -> failwith "count_people not implemented" ;;
+let rec count_people (fam : family) : int =
+  match fam with
+  | Single _ -> 1
+  | Family (_p1, _p2, []) -> 2
+  | Family (_p1, _p2, kids) -> 2 + List.fold_left (+) 0 (List.map count_people kids);;
 
 (*......................................................................
 Exercise 15: Write a function find_parents of type
