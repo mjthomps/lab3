@@ -349,7 +349,7 @@ exception Family_Trouble of string ;;
 let marry (fam : family) (p : person) : family =
   match fam with
   | Single spouse -> Family (spouse, p, [])
-  | Family (p1, p2, _) -> Family (p1, p2, [Single p]);;
+  | Family (p1, p2, _) -> raise (Family_Trouble "Can't marry a person who's already married!");;
 
 (*......................................................................
 Exercise 13: Write a function that accepts two families, and returns
