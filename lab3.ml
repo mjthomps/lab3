@@ -346,8 +346,10 @@ is already made up of a married couple?
 
 exception Family_Trouble of string ;;
 
-let marry =
-  fun _ -> failwith "marry not implemented" ;;
+let marry (fam : family) (p : person) : family =
+  match fam with
+  | Single spouse -> Family (spouse, p, [])
+  | Family (p1, p2, _) -> Family (p1, p2, [Single p]);;
 
 (*......................................................................
 Exercise 13: Write a function that accepts two families, and returns
