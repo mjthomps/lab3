@@ -189,7 +189,7 @@ sure to round your result when converting back to an integer.
 ......................................................................*)
 
 let blend_channel (n1 : int) (n2 : int) : int =
-  int_of_float (sqrt (((float_of_int n1) +. (float_of_int n2)) /. 2.));;
+  int_of_float (sqrt (float_of_int ((n1 + n2) / 2)));;
 
 (*......................................................................
 Exercise 6: Now write a function, blend, that returns the result of
