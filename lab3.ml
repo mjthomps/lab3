@@ -394,8 +394,21 @@ inequality. You may be accustomed to other operators, like, "==" and
 the Pervasives module can help explain why.)
 ......................................................................*)
 
-let find_parents =
-  fun _ -> failwith "find_parents not implemented" ;;
+let find_parents (fam : family) (name : string) : (person * person) option =
+  let rec find_name (n : string) (f : family) : family option =
+    match f with
+    | Single p -> if p.name = n then Some f else None
+    | Family (p1, p2, []) -> if p1.name = n || p2.name = n then Some f else None
+    | Family (p1, p2, kids) -> if p1.name <> n && p2.name <> n then List.find (fun x -> x <> None) (List.map (find_name n) kids)
+                                else Some f
+  in
+  match fam with
+  | Single _ | Family (_, _, []) -> None
+  | Family (p1, p2, kids) ->
+    let kidfam = find_name name fam in
+    if kidfam <> None then
+      Some (p1, p2)
+    else None;;
 
 
 (*======================================================================
