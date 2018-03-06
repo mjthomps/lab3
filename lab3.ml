@@ -451,8 +451,8 @@ edges.  The parameters you need to accept are, in order, the graph, a
 person and another person.
 ......................................................................*)
 
-let marry_graph =
-  fun _ -> failwith "marry_graph not implemented" ;;
+let marry_graph (g : graph) (p1 : person) (p2 : person) : graph =
+  (p1, SpouseOf, p2) :: (p2, SpouseOf, p1) :: g;;
 
 (*There are far fewer restrictions compared to our rigidly-defined
 tree structure with variants. For instance, using the revised
@@ -472,8 +472,8 @@ that includes the relationship whereby the third person is a child of
 the first two.
 ......................................................................*)
 
-let add_child_to_graph =
-  fun _ -> failwith "add_child_to_graph not implemented" ;;
+let add_child_to_graph (g : graph) (p1 : person) (p2 : person) (kid : person) : graph =
+  (p1, ParentOf, kid) :: (p2, ParentOf, kid) :: g;;
 
 (*......................................................................
 Exercise 18: Now, rewrite find_parents using this new graph form. Note
