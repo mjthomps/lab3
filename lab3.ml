@@ -292,7 +292,7 @@ Exercise 10: Define a person record type. Use the field names "name",
 "favorite", and "birthdate".
 ......................................................................*)
 
-type person = {name : string; faveclr : color; bday : date} ;;
+type person = {name : string; favorite : color; birthdate : date} ;;
 
 (* Let's now do something with these person values. We'll create a
 data structure that allows us to model simple familial relationships.
@@ -331,8 +331,8 @@ ensure the invariants are preserved for color and date, use them here
 as well.
 ......................................................................*)
 
-let new_child =
-  fun _ -> failwith "new_child not implemented" ;;
+let new_child (name : string) (clr : color) (bday : date) : family =
+  Single {name = name; favorite = valid_rgb clr; birthdate = valid_date bday};;
 
 (*......................................................................
 Exercise 12: Write a function that allows a person to marry in to a
