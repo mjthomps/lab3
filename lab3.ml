@@ -472,7 +472,7 @@ that includes the relationship whereby the third person is a child of
 the first two.
 ......................................................................*)
 
-let add_child_to_graph (g : graph) (p1 : person) (p2 : person) (kid : person) : graph =
+let add_child_to_graph (g : graph) (kid : person) (p1 : person) (p2 : person) : graph =
   (p1, ParentOf, kid) :: (p2, ParentOf, kid) :: g;;
 
 (*......................................................................
