@@ -362,7 +362,7 @@ to behave in corner cases.
 
 let rec add_to_family (f1 : family) (f2 : family) : family =
   match f1 with
-  | Single p -> f1
+  | Single p -> raise (Family_Trouble "Can't add family to unmarried person :(")
   | Family (p1, p2, []) -> Family (p1, p2, [f2])
   | Family (p1, p2, kids) -> Family (p1, p2, kids @ [f2]);;
 
