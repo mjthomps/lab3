@@ -188,8 +188,8 @@ and returns an integer whose result matches the calculation above. Be
 sure to round your result when converting back to an integer.
 ......................................................................*)
 
-let blend_channel (n1 : int) (n2 : int) : int =
-  int_of_float (sqrt (float_of_int ((n1*n1 + n2*n2) / 2)));;
+let blend_channel (x : int) (y : int) : int =
+  int_of_float ((sqrt (float_of_int (x*x + y*y) /. 2.0)) +. 0.5) ;;
 
 (*......................................................................
 Exercise 6: Now write a function, blend, that returns the result of
@@ -270,15 +270,18 @@ the invariant is violated, and returns the date if valid.
 exception Invalid_Date of string ;;
 
 let valid_date (today : date) : date =
-  match today.month with
-  | 1 | 3 | 5 | 7 | 8 | 10 | 12 -> if today.day > 0 && today.day <= 31 then today else raise (Invalid_Date "That day doesn't exist!")
-  | 2 -> if today.day > 0 && today.day <= 28 then today
-          else if today.day == 29 then
-            if today.year mod 4 == 0 && (not (today.year mod 100 == 0) || today.year mod 400 == 0) then today
+  let thisyear = 2018 in
+  if today.year <= thisyear && today.year >= 0 then
+    match today.month with
+    | 1 | 3 | 5 | 7 | 8 | 10 | 12 -> if today.day > 0 && today.day <= 31 then today else raise (Invalid_Date "That day doesn't exist!")
+    | 2 -> if today.day > 0 && today.day <= 28 then today
+            else if today.day == 29 then
+              if today.year mod 4 == 0 && (not (today.year mod 100 == 0) || today.year mod 400 == 0) then today
+              else raise (Invalid_Date "That day doesn't exist!")
             else raise (Invalid_Date "That day doesn't exist!")
-          else raise (Invalid_Date "That day doesn't exist!")
-  | 4 | 6 | 9 | 11 -> if today.day > 0 && today.day <= 30 then today else raise (Invalid_Date "That day doesn't exist!")
-  | _ -> raise (Invalid_Date "That day doesn't exist!");;
+    | 4 | 6 | 9 | 11 -> if today.day > 0 && today.day <= 30 then today else raise (Invalid_Date "That day doesn't exist!")
+    | _ -> raise (Invalid_Date "That day doesn't exist!")
+  else raise (Invalid_Date "That day doesn't exist!");;
 
 
 (*======================================================================
