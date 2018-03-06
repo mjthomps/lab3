@@ -188,8 +188,8 @@ and returns an integer whose result matches the calculation above. Be
 sure to round your result when converting back to an integer.
 ......................................................................*)
 
-let blend_channel =
-  fun _ -> failwith "blend_channel not implemented" ;;
+let blend_channel (n1 : int) (n2 : int) : int =
+  int_of_float (sqrt (((float_of_int n1) +. (float_of_int n2)) /. 2.));;
 
 (*......................................................................
 Exercise 6: Now write a function, blend, that returns the result of
@@ -197,8 +197,11 @@ blending two colors. Do you need to do anything special to preserve
 the invariant in this function after blending?
 ......................................................................*)
 
-let blend =
-  fun _ -> failwith "blend not implemented" ;;
+let blend (clr1 : color) (clr2 : color) : color =
+  let rgb1 = convert_to_rgb clr1 in
+  let rgb2 = convert_to_rgb clr2 in
+    match rgb1, rgb2 with
+    | (r1, g1, b1), (r2, g2, b2) -> make_color (blend_channel r1 r2) (blend_channel g1 g2) (blend_channel b1 b2);;
 
 
 (*======================================================================
